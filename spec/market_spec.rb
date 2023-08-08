@@ -28,6 +28,20 @@ RSpec.describe Market do
       expect(@market.name).to eq("South Pearl Street Farmers Market")
       expect(@market.vendors).to eq([])
     end
+
+    it "has a date" do
+      expect(@market.date).to eq(Date.today.strftime("%d/%m/%Y"))
+    end
+
+    it "can have a date in the past or future" do
+      allow(Date).to receive(:today).and_return(Date.new(2023, 07, 01))
+      market2 = Market.new("We Live in the Past")
+      expect(market2.date).to eq("01/07/2023")
+
+      allow(Date).to receive(:today).and_return(Date.new(2024, 01, 11))
+      market3 = Market.new("The Future is Now")
+      expect(market3.date).to eq("11/01/2024")
+    end
   end
 
   describe "#add_vendor" do
