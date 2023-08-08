@@ -1,3 +1,4 @@
+require 'date'
 require './lib/item'
 require './lib/vendor'
 require './lib/market'
@@ -28,7 +29,9 @@ RSpec.describe Market do
       expect(@market.name).to eq("South Pearl Street Farmers Market")
       expect(@market.vendors).to eq([])
     end
+  end
 
+  describe "#date" do
     it "has a date" do
       expect(@market.date).to eq(Date.today.strftime("%d/%m/%Y"))
     end
