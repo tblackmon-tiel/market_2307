@@ -23,12 +23,23 @@ class Market
   end
 
   def total_inventory
-
+    inventory_hash = Hash.new
+    unique_items.each do |item|
+      inventory_hash[item] => {
+        # quantity: get_total_item_count(item),
+        # vendors: vendors_that_sell(item)
+      }
+    end
+    inventory_hash
   end
 
   def unique_items
     @vendors.map do |vendor|
       vendor.inventory.map { |item, _| item }
     end.flatten.uniq
+  end
+
+  def get_total_item_count(item)
+    vendors_that_sell(item).sum { |vendor| vendor.check_stock(item) }
   end
 end

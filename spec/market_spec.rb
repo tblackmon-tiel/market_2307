@@ -107,4 +107,14 @@ RSpec.describe Market do
       expect(@market.unique_items).to eq([@item1, @item2, @item4, @item3])
     end
   end
+
+  describe "#get_total_item_count" do
+    it "sums up the total number of an item being sold between all vendors" do
+      @market.add_vendor(@vendor1)
+      @market.add_vendor(@vendor2)
+      @market.add_vendor(@vendor3)
+
+      expect(@market.get_total_item_count(@item1)).to eq(100)
+    end
+  end
 end
