@@ -12,6 +12,11 @@ RSpec.describe Market do
     @vendor2 = Vendor.new("Ba-Nom-a-Nom")
     @vendor3 = Vendor.new("Palisade Peach Shack")
     @market = Market.new("South Pearl Street Farmers Market")
+    @vendor1.stock(@item1, 35)
+    @vendor1.stock(@item2, 7)
+    @vendor2.stock(@item4, 50)
+    @vendor2.stock(@item3, 25)
+    @vendor3.stock(@item1, 65)
   end
 
   describe "#initialize" do
@@ -22,6 +27,16 @@ RSpec.describe Market do
     it "has readable attributes" do
       expect(@market.name).to eq("South Pearl Street Farmers Market")
       expect(@market.vendors).to eq([])
+    end
+  end
+
+  describe "#add_vendor" do
+    it "adds a vendor to the market vendor list" do
+      @market.add_vendor(@vendor1)
+      @market.add_vendor(@vendor2)
+      @market.add_vendor(@vendor3)
+
+      expect(@market.vendors).to eq([@vendor1, @vendor2, @vendor3])
     end
   end
 end
