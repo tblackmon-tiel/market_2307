@@ -39,4 +39,14 @@ RSpec.describe Market do
       expect(@market.vendors).to eq([@vendor1, @vendor2, @vendor3])
     end
   end
+
+  describe "#vendor_names" do
+    it "returns an array of all vendor names in the vendor list" do
+      @market.add_vendor(@vendor1)
+      @market.add_vendor(@vendor2)
+      @market.add_vendor(@vendor3)
+
+      expect(@market.vendor_names).to eq(["Rocky Mountain Fresh", "Ba-Nom-a-Nom", "Palisade Peach Shack"])
+    end
+  end
 end
