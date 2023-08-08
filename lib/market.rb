@@ -42,4 +42,10 @@ class Market
   def get_total_item_count(item)
     vendors_that_sell(item).sum { |vendor| vendor.check_stock(item) }
   end
+
+  def overstocked_items
+    total_inventory.find_all do |_, item_values|
+      item_values[:quantity] > 50 && item_values[:vendors].size > 1
+    end.map { |item| item.first } # find_all on a hash returns the key-value pair, just care about the key
+  end
 end
