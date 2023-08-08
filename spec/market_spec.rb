@@ -47,134 +47,104 @@ RSpec.describe Market do
     end
   end
 
-  describe "#add_vendor" do
-    it "adds a vendor to the market vendor list" do
-      @market.add_vendor(@vendor1)
-      @market.add_vendor(@vendor2)
-      @market.add_vendor(@vendor3)
-
-      expect(@market.vendors).to eq([@vendor1, @vendor2, @vendor3])
-    end
-  end
-
-  describe "#vendor_names" do
-    it "returns an array of all vendor names in the vendor list" do
-      @market.add_vendor(@vendor1)
-      @market.add_vendor(@vendor2)
-      @market.add_vendor(@vendor3)
-
-      expect(@market.vendor_names).to eq(["Rocky Mountain Fresh", "Ba-Nom-a-Nom", "Palisade Peach Shack"])
-    end
-  end
-
-  describe "#vendors_that_sell" do
-    it "returns an array of vendors that sell a given item" do
-      @market.add_vendor(@vendor1)
-      @market.add_vendor(@vendor2)
-      @market.add_vendor(@vendor3)
-
-      expect(@market.vendors_that_sell(@item1)).to eq([@vendor1, @vendor3])
-      expect(@market.vendors_that_sell(@item4)).to eq([@vendor2])
-    end
-  end
-
-  describe "#sorted_item_list" do
-    it "returns an array of all items from all vendors sorted alphabetically, non-repeating" do
-      @market.add_vendor(@vendor1)
-      @market.add_vendor(@vendor2)
-      @market.add_vendor(@vendor3)
-
-      expect(@market.sorted_item_list).to eq(["Banana Nice Cream", "Peach", "Peach-Raspberry Nice Cream", "Tomato"])
-    end
-  end
-
-  describe "#total_inventory" do
-    it "reports the quantities of all items sold at the market" do
-      @market.add_vendor(@vendor1)
-      @market.add_vendor(@vendor2)
-      @market.add_vendor(@vendor3)
-
-      expect(@market.total_inventory).to eq({
-        @item1 => {
-          quantity: 100,
-          vendors: [@vendor1, @vendor3]
-        },
-        @item2 => {
-          quantity: 7,
-          vendors: [@vendor1]
-        },
-        @item3 => {
-          quantity: 25,
-          vendors: [@vendor2]
-        },
-        @item4 => {
-          quantity: 50,
-          vendors: [@vendor2]
-        }
-      })
-    end
-  end
-
-  describe "#unique_items" do
-    it "returns an array of unique items from all vendors" do
-      @market.add_vendor(@vendor1)
-      @market.add_vendor(@vendor2)
-      @market.add_vendor(@vendor3)
-
-      expect(@market.unique_items).to eq([@item1, @item2, @item4, @item3])
-    end
-  end
-
-  describe "#get_total_item_count" do
-    it "sums up the total number of an item being sold between all vendors" do
-      @market.add_vendor(@vendor1)
-      @market.add_vendor(@vendor2)
-      @market.add_vendor(@vendor3)
-
-      expect(@market.get_total_item_count(@item1)).to eq(100)
-    end
-  end
-
-  describe "#overstocked_items" do
-    it "returns an array of items sold by more than one vendor with total quantity greater than 50" do
-      @market.add_vendor(@vendor1)
-      @market.add_vendor(@vendor2)
-      @market.add_vendor(@vendor3)
-
-      expect(@market.overstocked_items).to eq([@item1])
-
-      @vendor3.stock(@item2, 44)
-
-      expect(@market.overstocked_items).to eq([@item1, @item2])
-    end
-  end
-
-  describe "#sell" do
-    before(:each) do
+  context "vendors are added" do
+    before(:each) do 
       @market.add_vendor(@vendor1)
       @market.add_vendor(@vendor2)
       @market.add_vendor(@vendor3)
     end
 
-    it "returns false if the amount of an item requested cannot be fulfilled" do
-      expect(@market.sell(@item1, 400)).to be false
+    describe "#add_vendor" do
+      it "adds a vendor to the market vendor list" do
+        expect(@market.vendors).to eq([@vendor1, @vendor2, @vendor3])
+      end
     end
-
-    it "returns true if the amount of an item requested can be fulfilled" do
-      expect(@market.sell(@item1, 10)).to be true
+  
+    describe "#vendor_names" do
+      it "returns an array of all vendor names in the vendor list" do
+        expect(@market.vendor_names).to eq(["Rocky Mountain Fresh", "Ba-Nom-a-Nom", "Palisade Peach Shack"])
+      end
     end
-
-    it "removes the quantity requested from vendors until the quantity is fulfilled" do
-      expect(@vendor1.check_stock(@item1)).to be(35)
-      expect(@vendor3.check_stock(@item1)).to be(65)
-
-      @market.sell(@item1, 10)
-      expect(@vendor1.check_stock(@item1)).to be(25)
-
-      @market.sell(@item1, 40)
-      expect(@vendor1.check_stock(@item1)).to be(0)
-      expect(@vendor3.check_stock(@item1)).to be(50)
-      expect(@market.vendors_that_sell(@item1)).to eq([@vendor3])
+  
+    describe "#vendors_that_sell" do
+      it "returns an array of vendors that sell a given item" do
+        expect(@market.vendors_that_sell(@item1)).to eq([@vendor1, @vendor3])
+        expect(@market.vendors_that_sell(@item4)).to eq([@vendor2])
+      end
+    end
+  
+    describe "#sorted_item_list" do
+      it "returns an array of all items from all vendors sorted alphabetically, non-repeating" do
+        expect(@market.sorted_item_list).to eq(["Banana Nice Cream", "Peach", "Peach-Raspberry Nice Cream", "Tomato"])
+      end
+    end
+  
+    describe "#total_inventory" do
+      it "reports the quantities of all items sold at the market" do
+        expect(@market.total_inventory).to eq({
+          @item1 => {
+            quantity: 100,
+            vendors: [@vendor1, @vendor3]
+          },
+          @item2 => {
+            quantity: 7,
+            vendors: [@vendor1]
+          },
+          @item3 => {
+            quantity: 25,
+            vendors: [@vendor2]
+          },
+          @item4 => {
+            quantity: 50,
+            vendors: [@vendor2]
+          }
+        })
+      end
+    end
+  
+    describe "#unique_items" do
+      it "returns an array of unique items from all vendors" do
+        expect(@market.unique_items).to eq([@item1, @item2, @item4, @item3])
+      end
+    end
+  
+    describe "#get_total_item_count" do
+      it "sums up the total number of an item being sold between all vendors" do
+        expect(@market.get_total_item_count(@item1)).to eq(100)
+      end
+    end
+  
+    describe "#overstocked_items" do
+      it "returns an array of items sold by more than one vendor with total quantity greater than 50" do
+        expect(@market.overstocked_items).to eq([@item1])
+  
+        @vendor3.stock(@item2, 44)
+  
+        expect(@market.overstocked_items).to eq([@item1, @item2])
+      end
+    end
+  
+    describe "#sell" do
+      it "returns false if the amount of an item requested cannot be fulfilled" do
+        expect(@market.sell(@item1, 400)).to be false
+      end
+  
+      it "returns true if the amount of an item requested can be fulfilled" do
+        expect(@market.sell(@item1, 10)).to be true
+      end
+  
+      it "removes the quantity requested from vendors until the quantity is fulfilled" do
+        expect(@vendor1.check_stock(@item1)).to be(35)
+        expect(@vendor3.check_stock(@item1)).to be(65)
+  
+        @market.sell(@item1, 10)
+        expect(@vendor1.check_stock(@item1)).to be(25)
+  
+        @market.sell(@item1, 40)
+        expect(@vendor1.check_stock(@item1)).to be(0)
+        expect(@vendor3.check_stock(@item1)).to be(50)
+        expect(@market.vendors_that_sell(@item1)).to eq([@vendor3])
+      end
     end
   end
 end
