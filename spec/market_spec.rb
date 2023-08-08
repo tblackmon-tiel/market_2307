@@ -148,4 +148,26 @@ RSpec.describe Market do
       expect(@market.overstocked_items).to eq([@item1, @item2])
     end
   end
+
+  describe "#sell" do
+    it "returns false if the amount of an item requested cannot be fulfilled" do
+      expect(@market.sell(@item1, 400)).to be false
+    end
+
+    it "returns true if the amount of an item requested can be fulfilled" do
+      expect(@market.sell(@item1) 10).to be true
+    end
+
+    it "removes the quantity requested from vendors until the quantity is fulfilled" do
+      expect(@vendor1.stock(@item1)).to be(35)
+      expect(@vendor3.stock(@item1)).to be(65)
+
+      @market.sell(@item1, 10)
+      expect(@vendor1.stock(@item1)).to be(25)
+
+      @market.sell(@item1, 40)
+      expect(@vendor1.stock(@item1)).to be(0)
+      expect(@vendor3.stock(@item1)).to be(50)
+    end
+  end
 end
