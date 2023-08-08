@@ -17,4 +17,8 @@ class Vendor
   def potential_revenue
     @inventory.sum { |item, amount| amount * item.price }
   end
+
+  def remove_stock(item, amount)
+    @inventory[item] -= amount
+  end
 end

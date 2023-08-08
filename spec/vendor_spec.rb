@@ -60,4 +60,13 @@ RSpec.describe Vendor do
       expect(vendor3.potential_revenue).to eq(48.75)
     end
   end
+
+  describe "#remove_stock" do
+    it "lowers the stocked amount of an item" do
+      @vendor.stock(@item1, 30)
+      @vendor.remove_stock(@item1, 10)
+
+      expect(@vendor.check_stock(@item1)).to eq(20)
+    end
+  end
 end
