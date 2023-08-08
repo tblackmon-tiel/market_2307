@@ -144,6 +144,9 @@ RSpec.describe Market do
         expect(@vendor1.check_stock(@item1)).to be(0)
         expect(@vendor3.check_stock(@item1)).to be(50)
         expect(@market.vendors_that_sell(@item1)).to eq([@vendor3])
+
+        @market.sell(@item3, 24)
+        expect(@vendor2.check_stock(@item3)).to eq(1)
       end
 
       it "can't sell an item that doesn't exist" do
