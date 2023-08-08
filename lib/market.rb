@@ -23,4 +23,14 @@ class Market
       vendor.inventory.map { |item, _| item.name }
     end.flatten.uniq.sort
   end
+
+  def total_inventory
+
+  end
+
+  def unique_items
+    @vendors.map do |vendor|
+      vendor.inventory.map { |item, _| item }
+    end.flatten.uniq
+  end
 end
