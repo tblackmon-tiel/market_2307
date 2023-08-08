@@ -72,7 +72,7 @@ RSpec.describe Market do
   end
 
   describe "#total_inventory" do
-    xit "reports the quantities of all items sold at the market" do
+    it "reports the quantities of all items sold at the market" do
       @market.add_vendor(@vendor1)
       @market.add_vendor(@vendor2)
       @market.add_vendor(@vendor3)

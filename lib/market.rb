@@ -25,9 +25,9 @@ class Market
   def total_inventory
     inventory_hash = Hash.new
     unique_items.each do |item|
-      inventory_hash[item] => {
-        # quantity: get_total_item_count(item),
-        # vendors: vendors_that_sell(item)
+      inventory_hash[item] = {
+        quantity: get_total_item_count(item),
+        vendors: vendors_that_sell(item)
       }
     end
     inventory_hash
