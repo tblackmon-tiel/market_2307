@@ -150,24 +150,31 @@ RSpec.describe Market do
   end
 
   describe "#sell" do
+    before(:each) do
+      @market.add_vendor(@vendor1)
+      @market.add_vendor(@vendor2)
+      @market.add_vendor(@vendor3)
+    end
+
     it "returns false if the amount of an item requested cannot be fulfilled" do
       expect(@market.sell(@item1, 400)).to be false
     end
 
     it "returns true if the amount of an item requested can be fulfilled" do
-      expect(@market.sell(@item1) 10).to be true
+      expect(@market.sell(@item1, 10)).to be true
     end
 
     it "removes the quantity requested from vendors until the quantity is fulfilled" do
-      expect(@vendor1.stock(@item1)).to be(35)
-      expect(@vendor3.stock(@item1)).to be(65)
+      expect(@vendor1.check_stock(@item1)).to be(35)
+      expect(@vendor3.check_stock(@item1)).to be(65)
 
       @market.sell(@item1, 10)
-      expect(@vendor1.stock(@item1)).to be(25)
+      expect(@vendor1.check_stock(@item1)).to be(25)
 
       @market.sell(@item1, 40)
-      expect(@vendor1.stock(@item1)).to be(0)
-      expect(@vendor3.stock(@item1)).to be(50)
+      expect(@vendor1.check_stock(@item1)).to be(0)
+      expect(@vendor3.check_stock(@item1)).to be(50)
+      expect(@market.vendors_that_sell(@item1)).to eq([@vendor3])
     end
   end
 end

@@ -53,4 +53,18 @@ class Market
       item_values[:quantity] > 50 && item_values[:vendors].size > 1
     end.map { |item| item.first } # find_all on a hash returns the key-value pair, just care about the key
   end
+
+  def sell(item, quantity)
+    return false if get_total_item_count(item) < quantity
+    vendors_that_sell(item).each do |vendor|
+      vendor_stock = vendor.check_stock(item)
+      if vendor_stock >= quantity
+        vendor.remove_stock(item, quantity)
+        return true
+      else
+        quantity -= vendor_stock
+        vendor.remove_stock(item, vendor_stock)
+      end
+    end
+  end
 end
