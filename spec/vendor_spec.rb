@@ -18,4 +18,10 @@ RSpec.describe Vendor do
       expect(@vendor.inventory).to eq({})
     end
   end
+
+  describe "#check_stock" do
+    it "returns the number of an item in stock" do
+      expect(@vendor.check_stock(@item1)).to eq(0)
+    end
+  end
 end
